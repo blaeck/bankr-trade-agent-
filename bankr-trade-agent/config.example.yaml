@@ -1,0 +1,62 @@
+# Bankr Trade Agent Configuration
+# Copy this to config.yaml and customize your strategies.
+#
+# Supported strategy types:
+#   limit_buy    - Buy when price drops BELOW trigger_price
+#   limit_sell   - Sell when price rises ABOVE trigger_price
+#   take_profit  - Sell when price rises ABOVE trigger_price (alias for limit_sell)
+#   stop_loss    - Sell when price drops BELOW trigger_price (protects downside)
+
+pairs:
+  - id: eth-usdc                        # Unique identifier for this pair config
+    token: ETH
+    base_token: USDC
+    coingecko_id: ethereum              # CoinGecko token ID for price feeds
+    chain: base                         # Must be "base" for this agent
+    enabled: true
+    cooldown_seconds: 300               # Wait 5 min between trades on this pair
+    strategies:
+      - type: limit_buy
+        trigger_price: 1900             # Buy ETH when price drops below $1900
+        amount_usd: 50                  # Spend $50 USDC to buy ETH
+        max_executions: 3               # Never execute this strategy more than 3 times total
+        note: "Buy the dip below 1900"
+
+      - type: take_profit
+        trigger_price: 2200             # Sell ETH when price rises above $2200
+        amount_usd: 50
+        max_executions: 3
+        note: "Take profit at 2200"
+
+      - type: stop_loss
+        trigger_price: 1700             # Sell ETH if price crashes below $1700
+        amount_usd: 100                 # Sell $100 worth to cut losses
+        max_executions: 1               # Only trigger once (catastrophic protection)
+        note: "Emergency stop-loss"
+
+  - id: cbbtc-usdc
+    token: cbBTC
+    base_token: USDC
+    coingecko_id: coinbase-wrapped-btc
+    chain: base
+    enabled: false                      # Set to true to activate
+    cooldown_seconds: 600
+    strategies:
+      - type: limit_buy
+        trigger_price: 58000
+        amount_usd: 100
+        max_executions: 2
+        note: "Accumulate BTC below 58k"
+
+      - type: take_profit
+        trigger_price: 72000
+        amount_usd: 100
+        max_executions: 2
+        note: "Take profit at 72k"
+
+# Global settings
+settings:
+  max_daily_trades: 20                  # Hard cap: never execute more than N trades/day
+  price_deviation_threshold: 0.05      # Skip trade if price moved >5% since last check (stale data guard)
+  job_poll_timeout_ms: 120000          # Max time to wait for Bankr job to complete (2 min)
+  job_poll_interval_ms: 2000           # How often to poll job status

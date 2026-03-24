@@ -1,0 +1,28 @@
+{
+  "name": "bankr-trade-agent",
+  "version": "1.1.0",
+  "description": "Price alert and auto-trade agent using Bankr Wallet on Base chain",
+  "main": "dist/agent.js",
+  "scripts": {
+    "build":   "tsc",
+    "start":   "node dist/agent.js",
+    "dev":     "ts-node src/agent.ts",
+    "dry-run": "DRY_RUN=true ts-node src/agent.ts",
+    "status":  "ts-node src/status.ts"
+  },
+  "dependencies": {
+    "axios":   "^1.6.0",
+    "chalk":   "^4.1.2",
+    "dotenv":  "^16.3.1",
+    "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/node":    "^20.10.0",
+    "ts-node":        "^10.9.2",
+    "typescript":     "^5.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
